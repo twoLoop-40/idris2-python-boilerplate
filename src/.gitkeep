@@ -1,0 +1,13 @@
+# Your Idris2 source files go here
+
+Start by creating your first `.idr` file!
+
+Example:
+```bash
+# Create a new module
+touch src/MyModule.idr
+
+# Edit it with your favorite editor
+# Then convert it:
+/convert src/MyModule.idr
+```

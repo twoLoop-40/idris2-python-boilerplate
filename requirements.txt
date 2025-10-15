@@ -1,0 +1,14 @@
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+hypothesis>=6.82.0
+
+# Type checking
+mypy>=1.5.0
+
+# Code formatting
+black>=23.7.0
+ruff>=0.0.284
+
+# Optional: for domain types
+# pydantic>=2.1.0

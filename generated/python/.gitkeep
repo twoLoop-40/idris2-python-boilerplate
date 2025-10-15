@@ -1,0 +1,6 @@
+# Generated Python code will appear here
+
+After running `/convert`, your Python files will be generated here with:
+- Type hints from Idris2 signatures
+- Runtime assertions from dependent type constraints
+- Comprehensive docstrings

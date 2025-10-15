@@ -1,0 +1,7 @@
+# Generated test files will appear here
+
+Tests are automatically generated from Idris2 type signatures:
+- Precondition tests (type constraints)
+- Postcondition tests (return guarantees)
+- Property-based tests (invariants)
+- Integration tests (comparing with Idris2 output)
