@@ -8,6 +8,8 @@
 
 **A production-ready boilerplate for AI-assisted code generation using Idris2's dependent type system.**
 
+**English** | [한국어](README.ko.md)
+
 ## 🎯 The Problem
 
 ```
