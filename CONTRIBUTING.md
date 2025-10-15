@@ -53,7 +53,7 @@ We'd love support for:
 
 1. **Fork the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/idris2-python-boilerplate.git
+   git clone https://github.com/twoLoop-40/idris2-python-boilerplate.git
    cd idris2-python-boilerplate
    ```
 
@@ -253,7 +253,7 @@ All contributors will be:
 
 ## 📞 Questions?
 
-- Open a [Discussion](https://github.com/YOUR_USERNAME/idris2-python-boilerplate/discussions)
+- Open a [Discussion](https://github.com/twoLoop-40/idris2-python-boilerplate/discussions)
 - Tag us on social media
 - Join our community chat (if we set one up!)
 
