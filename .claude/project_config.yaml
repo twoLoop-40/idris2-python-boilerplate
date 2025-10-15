@@ -1,0 +1,254 @@
+# Idris2 Type-Driven Development Configuration
+# This file configures the AI-assisted code generation workflow
+
+# Project metadata
+project:
+  name: "ProgrammingWithIdris2"
+  description: "Learning Idris2 with type-driven AI code generation"
+  version: "0.1.0"
+
+# Directory structure
+directories:
+  source: "src"              # Idris2 source files
+  generated: "generated"     # All generated code
+  build: "build"             # Idris2 compilation output
+  tests: "generated/tests"   # Generated test files
+  docs: "generated/docs"     # Generated documentation
+
+# Target language configuration
+target:
+  language: "python"         # Primary target: python, typescript, rust, java
+  version: "3.11+"           # Target version
+
+  # Additional targets (optional)
+  additional:
+    - "typescript"           # Generate TS alongside Python
+    # - "rust"               # Uncomment to enable
+
+# Code generation settings
+generation:
+  # Convert dependent types to runtime checks
+  runtime_checks: true
+
+  # Generate comprehensive docstrings from types
+  documentation: true
+
+  # Preserve Idris2 type signatures in comments
+  preserve_types: true
+
+  # Add assertion messages explaining type violations
+  verbose_assertions: true
+
+  # Generate type stubs (.pyi for Python)
+  type_stubs: true
+
+# Test generation configuration
+testing:
+  framework: "pytest"        # pytest, unittest, hypothesis
+
+  # Test categories to generate
+  generate:
+    precondition_tests: true     # Test runtime assertions
+    postcondition_tests: true    # Test return guarantees
+    edge_case_tests: true        # Boundary values
+    property_tests: true         # Property-based with hypothesis
+    integration_tests: true      # Compare with Idris2 output
+
+  # Property-based testing settings
+  property_based:
+    enabled: true
+    library: "hypothesis"        # hypothesis, fast-check (TS)
+    max_examples: 100            # Number of random tests
+
+  # Coverage targets
+  coverage:
+    target: 95                   # Target coverage %
+    fail_under: 80               # Fail if below this
+
+# Verification settings
+verification:
+  # Compile Idris2 before converting
+  compile_before_convert: true
+
+  # Run Idris2 executable for output comparison
+  compare_outputs: true
+
+  # Automatically run tests after generation
+  auto_run_tests: true
+
+  # Verify type constraints become runtime checks
+  verify_assertions: true
+
+# Type mapping (Idris2 → Target Language)
+type_mappings:
+  # Basic types
+  Int:
+    python: "int"
+    typescript: "number"
+
+  String:
+    python: "str"
+    typescript: "string"
+
+  Bool:
+    python: "bool"
+    typescript: "boolean"
+
+  # Dependent types → Runtime constructs
+  Nat:
+    python: "int  # >= 0"
+    typescript: "number  // >= 0"
+    runtime_check: "assert value >= 0"
+
+  Vect:
+    python: "list  # with length checking"
+    typescript: "Array  // with length checking"
+    runtime_check: "assert len(data) == expected_length"
+
+  Fin:
+    python: "int  # bounded"
+    typescript: "number  // bounded"
+    runtime_check: "assert 0 <= value < bound"
+
+# Custom domain types (customize for your project)
+domain_types:
+  # Example: Add your domain-specific types
+  # UserId:
+  #   python: "uuid.UUID"
+  #   typescript: "string"
+  #   validation: "validate_uuid"
+
+  # EmailAddress:
+  #   python: "pydantic.EmailStr"
+  #   typescript: "string & { __brand: 'Email' }"
+  #   validation: "validate_email"
+
+# Conversion rules
+conversion:
+  # Pattern matching strategy
+  pattern_matching:
+    style: "if-elif-else"      # if-elif-else, match-case (Python 3.10+)
+    exhaustiveness_check: true # Add else: raise for safety
+
+  # Function naming convention
+  naming:
+    private_prefix: "_"        # _helperFunction
+    case_style: "snake_case"   # snake_case, camelCase
+
+  # Import generation
+  imports:
+    auto_generate: true        # Auto-add necessary imports
+    group_by: "stdlib-first"   # stdlib-first, alphabetical
+
+# AI assistance configuration
+ai:
+  # Context to provide for code generation
+  context_files:
+    - ".claude/project_spec.md"
+    - "README.md"
+
+  # AI should ask before:
+  confirm_before:
+    - "major_refactoring"      # Large type changes
+    - "breaking_changes"       # API changes
+    - "new_dependencies"       # Adding new libs
+
+  # Suggest improvements
+  suggestions:
+    dependent_type_opportunities: true  # Suggest where to use Vect, Fin, etc.
+    totality_check: true               # Suggest total functions
+    simplification: true               # Suggest simpler types
+
+# Build configuration
+build:
+  idris2:
+    compiler: "idris2"         # Path to idris2 or just 'idris2'
+    backend: "chez"            # chez, racket, node
+    options:
+      - "--no-color"           # Clean output for parsing
+      - "--check"              # Type check only
+
+  target:
+    python:
+      formatter: "black"       # black, ruff
+      linter: "ruff"           # ruff, pylint, mypy
+      type_checker: "mypy"     # mypy, pyright
+
+    typescript:
+      compiler: "tsc"
+      linter: "eslint"
+
+# Output formatting
+output:
+  # Line length for generated code
+  line_length: 88             # Black default for Python
+
+  # Indentation
+  indent_size: 4              # Spaces
+
+  # Add generation notice
+  add_header: true
+  header_template: |
+    # AUTO-GENERATED from {source_file}
+    # Generated: {timestamp}
+    # DO NOT EDIT - Modify the Idris2 source instead
+    # To regenerate: /convert {source_file}
+
+# Git integration
+git:
+  # Auto-add generated files to .gitignore
+  auto_gitignore:
+    - "build/"
+    - "*.ttc"
+    - "*.ttm"
+
+  # Commit strategy
+  auto_commit: false           # Don't auto-commit generated code
+  commit_message_template: "Generate {language} from {source_file}"
+
+# Logging and debugging
+logging:
+  level: "INFO"                # DEBUG, INFO, WARNING, ERROR
+  log_file: ".claude/conversion.log"
+
+  # Log conversion decisions
+  log_decisions: true          # Why certain conversions were chosen
+
+  # Verbose type checking
+  verbose_types: false         # Detailed type inference logs
+
+# Performance
+performance:
+  # Cache compiled Idris2 modules
+  cache_compiled: true
+  cache_dir: ".claude/cache"
+
+  # Parallel conversion
+  parallel: true
+  max_workers: 4               # CPU cores to use
+
+# Custom hooks (advanced)
+hooks:
+  # Run before conversion
+  pre_convert:
+    # - "bash scripts/validate_idris.sh"
+
+  # Run after conversion
+  post_convert:
+    - "black generated/python/"          # Format Python
+    # - "mypy generated/python/"         # Type check
+
+  # Run after test generation
+  post_test:
+    - "pytest generated/tests/ -v"       # Run tests
+
+# Experimental features
+experimental:
+  # Generate formal proofs as assertions
+  proof_as_assertions: false
+
+  # Use LLM to explain type errors
+  ai_error_explanations: true
+
+  # Suggest refactorings based on types
+  type_driven_refactoring: false
